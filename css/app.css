@@ -157,7 +157,17 @@ header h1 {
     opacity: 1;
 }
 
+.delete {
+    color: rgb(150, 38, 38);
+}
 
+.add {
+    color: rgb(21, 112, 21);
+}
+
+.edit {
+    color: rgb(32, 32, 70);
+}
 
 /* Todo form */
 
