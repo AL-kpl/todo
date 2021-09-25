@@ -8,9 +8,10 @@ todoForm.addEventListener('submit', addTodoItem)
 function addTodoItem(event) {
     event.preventDefault()
 
-    if (addInput.value) return alert('You need to input the name of the task.')
+    if (addInput.value === '') return alert('You need to input the name of the task.')
 
-    const listItem = createTodoItem(addInput.value)
+    const todoItem = createTodoItem(addInput.value)
+    todoList.appendChild(todoItem)
 }
 
 function createTodoItem(title) {
