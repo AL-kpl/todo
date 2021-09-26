@@ -3,7 +3,12 @@ const addInput = document.getElementById('add-input')
 const todoList = document.getElementById('todo-list')
 const todoItems = document.querySelectorAll('.todo-item')
 
-todoForm.addEventListener('submit', addTodoItem)
+main()
+
+function main() {
+    todoForm.addEventListener('submit', addTodoItem)
+    todoItems.forEach(item => bindEvent(item))
+}
 
 function addTodoItem(event) {
     event.preventDefault()
@@ -13,6 +18,43 @@ function addTodoItem(event) {
     const todoItem = createTodoItem(addInput.value)
     todoList.appendChild(todoItem)
     addInput.value = ''
+}
+
+function toggleTodoItem({target}) {
+    const listItem = this.parentNode
+    listItem.classList.toggle('completed')
+}
+
+function editTodoItem() {
+    const listItem = this.parentNode
+    const title = listItem.querySelector('.title')
+    const editInput = listItem.querySelector('.textfield')
+    const isEditing = listItem.classList.contains('editing')
+
+    if (isEditing) {
+        title.innerText = editInput.value
+        this.innerText = 'Change'
+    } else {
+        editInput.value = title.innerText
+        this.innerText = 'Save'
+    }
+
+    listItem.classList.toggle('editing')
+}
+
+function deleteTodoItem() {
+    const listItem = this.parentNode
+    todoList.removeChild(listItem)
+}
+
+function bindEvent(todoItem) {
+    const checkbox = todoItem.querySelector('.checkbox')
+    const editButton = todoItem.querySelector('button.edit')
+    const deleteButton = todoItem.querySelector('button.delete')
+
+    checkbox.addEventListener('change', toggleTodoItem)
+    editButton.addEventListener('click', editTodoItem)
+    deleteButton.addEventListener('click', deleteTodoItem)
 }
 
 function createTodoItem(title) {
@@ -44,6 +86,8 @@ function createTodoItem(title) {
     listItem.appendChild(editInput)
     listItem.appendChild(editButton)
     listItem.appendChild(deleteButton)
+
+    bindEvent(listItem)
 
     return listItem
 }

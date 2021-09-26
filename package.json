@@ -1,0 +1,19 @@
+{
+  "name": "todo",
+  "version": "1.0.0",
+  "description": "Just create Todo app on JS",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AL-kpl/todo.git"
+  },
+  "author": "Kapula Alex <kon2vpalto@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AL-kpl/todo/issues"
+  },
+  "homepage": "https://github.com/AL-kpl/todo#readme"
+}
