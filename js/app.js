@@ -12,6 +12,7 @@ function addTodoItem(event) {
 
     const todoItem = createTodoItem(addInput.value)
     todoList.appendChild(todoItem)
+    addInput.value = ''
 }
 
 function createTodoItem(title) {
