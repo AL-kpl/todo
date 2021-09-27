@@ -1,93 +1,102 @@
-const todoForm = document.getElementById('todo-form')
-const addInput = document.getElementById('add-input')
-const todoList = document.getElementById('todo-list')
-const todoItems = document.querySelectorAll('.todo-item')
+const main = (document => {
+    const todoForm = document.getElementById('todo-form')
+    const addInput = document.getElementById('add-input')
+    const todoList = document.getElementById('todo-list')
+    const todoItems = document.querySelectorAll('.todo-item')
+    const data = [{id: 1, title: '', completed: false}, {}, {}]
 
-main()
 
-function main() {
-    todoForm.addEventListener('submit', addTodoItem)
-    todoItems.forEach(item => bindEvent(item))
-}
-
-function addTodoItem(event) {
-    event.preventDefault()
-
-    if (addInput.value === '') return alert('You need to input the name of the task.')
-
-    const todoItem = createTodoItem(addInput.value)
-    todoList.appendChild(todoItem)
-    addInput.value = ''
-}
-
-function toggleTodoItem({target}) {
-    const listItem = this.parentNode
-    listItem.classList.toggle('completed')
-}
-
-function editTodoItem() {
-    const listItem = this.parentNode
-    const title = listItem.querySelector('.title')
-    const editInput = listItem.querySelector('.textfield')
-    const isEditing = listItem.classList.contains('editing')
-
-    if (isEditing) {
-        title.innerText = editInput.value
-        this.innerText = 'Change'
-    } else {
-        editInput.value = title.innerText
-        this.innerText = 'Save'
+    function main() {
+        todoForm.addEventListener('submit', addTodoItem)
+        todoItems.forEach(item => bindEvent(item))
     }
 
-    listItem.classList.toggle('editing')
-}
+    function addTodoItem(event) {
+        event.preventDefault()
 
-function deleteTodoItem() {
-    const listItem = this.parentNode
-    todoList.removeChild(listItem)
-}
+        if (addInput.value === '') return alert('You need to input the name of the task.')
 
-function bindEvent(todoItem) {
-    const checkbox = todoItem.querySelector('.checkbox')
-    const editButton = todoItem.querySelector('button.edit')
-    const deleteButton = todoItem.querySelector('button.delete')
+        const todoItem = createTodoItem(addInput.value)
+        todoList.appendChild(todoItem)
+        addInput.value = ''
+    }
 
-    checkbox.addEventListener('change', toggleTodoItem)
-    editButton.addEventListener('click', editTodoItem)
-    deleteButton.addEventListener('click', deleteTodoItem)
-}
+    function toggleTodoItem({target}) {
+        const listItem = this.parentNode
+        listItem.classList.toggle('completed')
+    }
 
-function createTodoItem(title) {
-    const checkbox = document.createElement('input')
-    checkbox.type = 'checkbox'
-    checkbox.className = 'checkbox'
+    function editTodoItem() {
+        const listItem = this.parentNode
+        const title = listItem.querySelector('.title')
+        const editInput = listItem.querySelector('.textfield')
+        const isEditing = listItem.classList.contains('editing')
 
-    const label = document.createElement('label')
-    label.innerText = title
-    label.className = 'title'
+        if (isEditing) {
+            title.innerText = editInput.value
+            this.innerText = 'Change'
+        } else {
+            editInput.value = title.innerText
+            this.innerText = 'Save'
+        }
 
-    const editInput = document.createElement('input')
-    editInput.type = 'text'
-    editInput.className = 'textfield'
+        listItem.classList.toggle('editing')
+    }
 
-    const editButton = document.createElement('button')
-    editButton.innerText = 'change'
-    editButton.className = 'edit'
+    function deleteTodoItem() {
+        const listItem = this.parentNode
+        todoList.removeChild(listItem)
+    }
 
-    const deleteButton = document.createElement('button')
-    deleteButton.innerText = 'remove'
-    deleteButton.className = 'delete'
+    function bindEvent(todoItem) {
+        const checkbox = todoItem.querySelector('.checkbox')
+        const editButton = todoItem.querySelector('button.edit')
+        const deleteButton = todoItem.querySelector('button.delete')
 
-    const listItem = document.createElement('li')
-    listItem.className = 'todo-item'
+        checkbox.addEventListener('change', toggleTodoItem)
+        editButton.addEventListener('click', editTodoItem)
+        deleteButton.addEventListener('click', deleteTodoItem)
+    }
 
-    listItem.appendChild(checkbox)
-    listItem.appendChild(label)
-    listItem.appendChild(editInput)
-    listItem.appendChild(editButton)
-    listItem.appendChild(deleteButton)
+    function createElement(tag, props, ...children) {
+        const element = document.createElement(tag)
 
-    bindEvent(listItem)
+        Object.keys(props).forEach(key => element[key] = props[key])
 
-    return listItem
-}
+        if (children.length > 0) {
+            children.forEach(child => {
+                if (typeof child === 'string') child = document.createTextNode(child)
+                element.appendChild(child)
+            })
+        }
+
+        return element
+    }
+
+    function createTodoItem(title) {
+        const checkbox = createElement('input', {type: 'checkbox', className: 'checkbox'})
+        const label = createElement('label', {className: 'title'}, title)
+        const editInput = createElement('input', {type: 'text', className: 'textfield'})
+        const editButton = createElement('button', {className: 'edit'}, 'Change')
+        const deleteButton = createElement('button', {className: 'delete'}, 'Remove')
+        const listItem = createElement('li', {className: 'todo-item'}, checkbox, label, editInput, editButton, deleteButton)
+
+        bindEvent(listItem)
+
+        return listItem
+    }
+
+    function load() {
+        const data = JSON.parse(localStorage.getItem('todos'))
+        return data
+    }
+
+    function save(data) {
+        const string = JSON.stringify(data)
+        localStorage.setItem('todos', string)
+    }
+
+    return main
+})(document)
+
+main()
